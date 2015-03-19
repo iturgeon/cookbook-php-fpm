@@ -26,13 +26,14 @@ template node['php-fpm']['conf_file'] do
   notifies :restart, "service[php-fpm]"
 end
 
-unless node['php-fpm']['pools'].key?('www')
-  php_fpm_pool 'www' do
-    enable false
-  end
-end
-
 if node['php-fpm']['pools']
+
+  unless node['php-fpm']['pools'].key?('www')
+    php_fpm_pool 'www' do
+      enable false
+    end
+  end
+
   node['php-fpm']['pools'].each do |pool|
     if pool.is_a?(Array)
       pool_name = pool[0]
